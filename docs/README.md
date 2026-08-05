@@ -69,27 +69,45 @@ The visual style is curated for a modern, sleek developer feel using an **Obsidi
 
 ## 🐳 Docker Deployment & Datastore Mapping
 
-DevHub includes a container configuration (`www/Dockerfile`) that enables quick deployment. It exposes port `2999` and defines `/app/data` as a mountable directory holding the persistent links database (`links.json`).
+DevHub includes a container configuration (`Dockerfile`) at the project root that enables quick deployment. It exposes port `2999` and defines `/data` as a mountable directory holding the persistent links database (`links.json`).
 
 ### 1. The Dockerfile
-The application uses the following `Dockerfile` inside the `www/` directory:
+The application uses the following `Dockerfile` inside the project root:
 ```dockerfile
+# Use light and secure alpine node image
 FROM node:20-alpine
+
+# Set working directory
 WORKDIR /app
-COPY package*.json ./
+
+# Copy package dependencies from www folder to /app inside image
+COPY www/package*.json ./
+
+# Install production dependencies
 RUN npm ci --only=production
-COPY server.js ./
-COPY public/ ./public/
+
+# Copy application files from www folder to /app inside image
+COPY www/server.js ./
+COPY www/public/ ./public/
+
+# Expose port
 EXPOSE 2999
-RUN mkdir -p /app/data
-VOLUME /app/data
+
+# Create data directory outside of application folder and define as volume for external mapping
+RUN mkdir -p /data
+VOLUME /data
+
+# Define environment variable default for storage path
+ENV DATA_DIR=/data
+
+# Run application
 CMD ["npm", "start"]
 ```
 
 ### 2. Build the Docker Image
-Transfer the files to your machine and run the build command from the project root:
+Navigate to the project root directory and run the build command:
 ```bash
-docker build -t devhub-landing-page ./www
+docker build -t devhub .
 ```
 
 ### 3. Deploying on Ubuntu Server 26.04 (Production)
@@ -108,10 +126,10 @@ Run the container with restart policies so it launches automatically on system b
 ```bash
 docker run -d \
   -p 2999:2999 \
-  -v /var/lib/devhub/data:/app/data \
+  -v /var/lib/devhub/data:/data \
   --name devhub \
   --restart unless-stopped \
-  devhub-landing-page
+  devhub
 ```
 
 ---
@@ -122,18 +140,18 @@ docker run -d \
 ```bash
 docker run -d \
   -p 2999:2999 \
-  -v $(pwd)/data:/app/data \
+  -v $(pwd)/data:/data \
   --name devhub \
-  devhub-landing-page
+  devhub
 ```
 
 #### On Windows Development (Command Prompt):
 ```cmd
 docker run -d ^
   -p 2999:2999 ^
-  -v %cd%\data:/app/data ^
+  -v %cd%\data:/data ^
   --name devhub ^
-  devhub-landing-page
+  devhub
 ```
 
 ---
@@ -141,7 +159,7 @@ docker run -d ^
 ### Explanation of Docker Flags:
 - `-d`: Runs the container in the background (detached mode).
 - `-p 2999:2999`: Maps port `2999` of the host to port `2999` of the container.
-- `-v /var/lib/devhub/data:/app/data`: Binds the container's storage folder (`/app/data`) to the Ubuntu Server's host path (`/var/lib/devhub/data`). Any tool links added, edited, or reordered will persist here across container rebuilds.
+- `-v /var/lib/devhub/data:/data`: Binds the container's storage folder (`/data`) to the Ubuntu Server's host path (`/var/lib/devhub/data`). Any tool links added, edited, or reordered will persist here across container rebuilds.
 - `--restart unless-stopped`: Ensures the DevHub service starts up automatically after server updates or host reboots.
 - `--name devhub`: Assigns a readable identifier to the container.
 

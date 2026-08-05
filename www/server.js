@@ -11,7 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 2999;
 
 // Path to storage
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
 const DATA_FILE = path.join(DATA_DIR, 'links.json');
 
 // Ensure data folder exists
