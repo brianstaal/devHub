@@ -1,0 +1,15 @@
+{
+  "name": "internal-tool-mapper",
+  "version": "1.0.0",
+  "description": "Developer landing page and internal tool mapper",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-html-parser": "^6.1.13"
+  }
+}

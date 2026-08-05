@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Hub - Internal Tools Mapper</title>
+  <!-- SEO & Description -->
+  <meta name="description" content="Centralized developer landing page mapping internal build tools, dashboards, and services with drag-and-drop sortability and automatic metadata retrieval.">
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="index.css">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
+</head>
+<body>
+  
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <i data-lucide="terminal"></i>
+        </div>
+        <div>
+          <h1>DevHub</h1>
+          <p class="subtitle">Developer Portal</p>
+        </div>
+      </div>
+      
+      <div class="search-bar-container">
+        <i data-lucide="search" class="search-icon"></i>
+        <input type="text" id="search-input" placeholder="Filter tools by name, description or URL..." autocomplete="off">
+        <span class="search-shortcut">/</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <!-- Empty state when no cards match filter or exist -->
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon-wrapper">
+          <i data-lucide="layout-grid"></i>
+        </div>
+        <h3>No tools found</h3>
+        <p>Try searching for something else or add a new tool to get started.</p>
+        <button id="empty-add-btn" class="btn btn-primary">
+          <i data-lucide="plus"></i> Add First Tool
+        </button>
+      </div>
+
+      <!-- Grid of tools -->
+      <div id="tools-grid" class="tools-grid">
+        <!-- Dynamic cards go here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Add Button -->
+  <button id="fab-add-btn" class="fab-btn" title="Add new internal tool">
+    <i data-lucide="plus"></i>
+  </button>
+
+  <!-- Modal Backdrop for Add/Edit Tool -->
+  <div id="tool-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-title">Add Internal Tool</h2>
+        <button id="modal-close-btn" class="close-btn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      
+      <form id="tool-form" class="modal-body" novalidate>
+        <input type="hidden" id="tool-id">
+        
+        <div class="form-group">
+          <label for="tool-url">Tool URL <span class="required">*</span></label>
+          <div class="url-input-wrapper">
+            <input type="url" id="tool-url" placeholder="https://example.com" required>
+            <button type="button" id="btn-fetch-meta" class="btn btn-secondary" title="Fetch details from URL">
+              <span class="btn-text">Fetch Info</span>
+              <span class="btn-spinner hidden"></span>
+            </button>
+          </div>
+          <span class="field-help">Enter the tool's address to auto-retrieve its icon and details.</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="tool-name">Name / Title <span class="required">*</span></label>
+            <input type="text" id="tool-name" placeholder="e.g., Grafana" required>
+          </div>
+
+          <div class="form-group">
+            <label for="tool-icon-url">Icon Image URL</label>
+            <input type="text" id="tool-icon-url" placeholder="https://example.com/favicon.png">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="tool-description">Description</label>
+          <textarea id="tool-description" rows="3" placeholder="Briefly describe what this tool is used for..."></textarea>
+        </div>
+
+        <!-- Live Preview Block -->
+        <div class="preview-section">
+          <h3>Live Preview</h3>
+          <div class="preview-container">
+            <div class="tool-card preview-card">
+              <!-- Drag Handle Mockup -->
+              <div class="drag-handle-mock">
+                <i data-lucide="grip-vertical"></i>
+              </div>
+              <div class="card-header">
+                <div class="card-icon-container">
+                  <img id="preview-card-img" src="" alt="Icon" class="hidden">
+                  <div id="preview-card-fallback" class="icon-fallback">T</div>
+                </div>
+                <div class="card-actions-mock">
+                  <button type="button" class="action-btn-mock"><i data-lucide="edit-3"></i></button>
+                  <button type="button" class="action-btn-mock"><i data-lucide="trash-2"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <h3 id="preview-card-title">Tool Title</h3>
+                <p id="preview-card-desc" class="card-desc">No description provided yet.</p>
+              </div>
+              <div class="card-footer">
+                <span id="preview-card-url" class="card-url">example.com</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-modal-cancel" class="btn btn-text-only">Cancel</button>
+          <button type="submit" id="btn-modal-save" class="btn btn-primary">Save Tool</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- App JS -->
+  <script src="index.js"></script>
+</body>
+</html>
