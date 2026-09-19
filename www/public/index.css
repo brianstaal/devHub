@@ -427,7 +427,8 @@ body {
   object-fit: contain;
 }
 
-.card-icon-container img.hidden {
+.card-icon-container img.hidden,
+.card-icon-container .icon-fallback.hidden {
   display: none;
 }
 
