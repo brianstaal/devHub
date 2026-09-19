@@ -4,6 +4,8 @@ DevHub is a lightweight, responsive developer landing page designed to organize 
 
 It provides an intuitive grid interface where links can be customized, filtered, and sorted dynamically using drag-and-drop. It also features automatic page metadata scraping to retrieve titles, descriptions, and favicons from URLs instantly.
 
+![DevHub dashboard with tool cards and search](dashboard.png)
+
 ---
 
 ## 🎨 Color Scheme & Design System
